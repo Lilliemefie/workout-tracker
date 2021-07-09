@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   });
 
   //create new workout > WORK
-  app.post("/exercise", ({ body }, res) => {
+  app.post("/api/workouts", ({ body }, res) => {
       db.Workout.create(body)
       .then(newWorkout => {
         res.json(newWorkout);
@@ -34,16 +34,6 @@ app.get("/", (req, res) => {
   });
 
 
-
-//create new workout > WORK
-// app.post("/excercise", async ({ body }, res) => {
-//     try {
-//        const workoutDT = await Workout.create(body)
-//         res.status(200).json(workoutDT);
-// }catch(err) {
-//         res.status(400).json(err);
-//     }
-// });
 
 
 // app.get("/excercise?", async ({ body }, res) => {

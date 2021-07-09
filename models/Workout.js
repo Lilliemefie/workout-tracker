@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const WorkoutSchema = new Schema({
+    exercises: [{
     type: {
         type: String,
         trim: true,
         required: "Type of workout is required"
     },
-    name: {
+    name: { 
         type: String,
         trim: true,
         required: "Name of workout is required"
@@ -36,23 +37,22 @@ const WorkoutSchema = new Schema({
     sets: {
         type: Number,
         trim: true,
-        require: "Sets is required"
-    },
-    workoutCreated: {
+        require: "Sets is required"}
+}],
+    day: {
         type: Date,
         default: Date.now
     },
 
-    lastUpdated: Date,
+    // lastUpdated: Date,
 });
 
 
-
-WorkoutSchema.methods.lastUpdatedDate = function() {
-    this.lastUpdated = Date.now();
+// WorkoutSchema.methods.lastUpdatedDate = function() {
+//     this.lastUpdated = Date.now();
   
-    return this.lastUpdated;
-  };
+//     return this.lastUpdated;
+//   };
   
 
 

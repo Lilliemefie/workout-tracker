@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 3000;
 
-const db = require("./models");
+const Workout = require("./workoutModel");
 
 const app = express();
 
@@ -15,9 +15,24 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutdb", { useNewUrlParser: true, useUnifiedTopology: true  });
 
 
+app.post("/excercise", ({body}, res) => {
+   Workout.create(body)
+   .then(dbWorkout => {
+       res.json(dbWorkout);
+   })
+   .catch(err => {
+       res.json(err);
+   });
+})
+
+//app.get("/stats")
+
+//app.get excercise? (continue workout)
+
+//app.get("excercise") (new workout)
 
 
 

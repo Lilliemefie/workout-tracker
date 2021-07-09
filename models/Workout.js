@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const WorkoutSchema = new Schema({
+    day: {
+        type: Date,
+        default: Date.now
+    },
+    
     exercises: [{
     type: {
         type: String,
@@ -39,10 +44,6 @@ const WorkoutSchema = new Schema({
         trim: true,
         require: "Sets is required"}
 }],
-    day: {
-        type: Date,
-        default: Date.now
-    },
 
     // lastUpdated: Date,
 });

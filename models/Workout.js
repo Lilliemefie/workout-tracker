@@ -7,7 +7,7 @@ const WorkoutSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    
+
     exercises: [{
     type: {
         type: String,
@@ -45,7 +45,11 @@ const WorkoutSchema = new Schema({
         require: "Sets is required"}
 }],
 
-    // lastUpdated: Date,
+    {
+  // adds a virtual property, not stored in Mongo, to compute properties on documents 
+  toJSON: {
+  virtuals: true,
+  },
 });
 
 

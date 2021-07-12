@@ -23,8 +23,10 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { use
 
 //call first page (link for Fitness Tracker on Nav) > WORK
 app.get("/", (req, res) => {
-    res.send(index.html);
+    res.sendFile(path.join(__dirname, "../public/index.html"))
   });
+
+ 
 
   //create new workout > WORK
   app.post("/api/workouts", ({ body }, res) => {
@@ -37,12 +39,12 @@ app.get("/", (req, res) => {
       });
   });
 
-// Read last workout 
+// Read last workout > WORK
 app.get("/api/workouts", (req, res) => {
     console.log("Reading workout")
-    Workout.find({})
-      .then(dbWorkout => {
-        res.json(dbWorkout);
+    db.Workout.find({})
+      .then(WorkoutDT => {
+        res.json(WorkoutDT);
       })
       .catch(err => {
         res.status(400).json(err);
@@ -50,11 +52,20 @@ app.get("/api/workouts", (req, res) => {
   });
 
 
-// app.get("/excercise?", async ({ body }, res) => {
-//     try {
-//         const prevWorkout = await Workout.findOneAndUpdate({})
-//     }
-// })
+// Add an exercise - 
+app.put("/api/workouts/:id", (req, res) => {
+    db.Workout.findByIdAndUpdate(
+      req.params.id,
+      { $push: {exercises: req.body}},
+      { new: true}
+    )
+      .then(WorkoutDT => {
+        res.json(WorkoutDT);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  });
 
 
 

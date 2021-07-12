@@ -44,12 +44,13 @@ const WorkoutSchema = new Schema({
         trim: true,
         require: "Sets is required"}
 }],
-
-    {
+},
+  {  
   // adds a virtual property, not stored in Mongo, to compute properties on documents 
   toJSON: {
   virtuals: true,
   },
+
 });
 
 

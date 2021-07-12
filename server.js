@@ -1,7 +1,10 @@
+// Dependencies
 const express = require("express");
-const logger = require("morgan");
+const logger = require("morgan"); // logs all request to the console
 const mongoose = require("mongoose");
+const path = require("path");
 
+// Sets up Express App
 const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
@@ -15,6 +18,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+// db Mongo
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useUnifiedTopology: true  });
 
 //call first page (link for Fitness Tracker on Nav) > WORK
@@ -33,7 +37,17 @@ app.get("/", (req, res) => {
       });
   });
 
-
+// Read last workout 
+app.get("/api/workouts", (req, res) => {
+    console.log("Reading workout")
+    Workout.find({})
+      .then(dbWorkout => {
+        res.json(dbWorkout);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });
+  });
 
 
 // app.get("/excercise?", async ({ body }, res) => {

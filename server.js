@@ -9,9 +9,8 @@ const PORT = process.env.PORT || 3000;
 const db = require("./models");
 const app = express();
 
-
+// Middleware
 app.use(logger("dev"));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
@@ -19,16 +18,16 @@ app.use(express.static("public"));
 // db Mongo
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
-//send file to render on browser
 
+// Route to Home page
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"))
 });
-
+// Route to Exercise page
 app.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/exercise.html"))
 });
-
+ // Route to Stats page
 app.get("/stats", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/stats.html"))
 });
@@ -48,22 +47,31 @@ app.post("/api/workouts", (req, res) => {
 
 // Read last workout > WORK
 app.get("/api/workouts", (req, res) => {
-    db.Workout.find({})
-        .then(WorkoutDT => {
-            res.json(WorkoutDT);
-        })
-        .catch(err => {
-            res.status(400).json(err);
-        });
-});
+    db.Workout.aggregate([
+      {
+        $addFields: {
+          totalDuration: { 
+            $sum: "$exercises.duration"
+          }
+        }
+      }
+    ])
+    .then(dbWorkout => {
+        res.json(dbWorkout);
+    })
+    .catch(err => {
+        res.status(400).json(err);
+    });
+  });
 
 
 //  Add (update) an exercise - WORK
 app.put("/api/workouts/:id", (req, res) => {
-    db.Workout.findByIdAndUpdate(
-        {_id: req.params.id},
-        { $push: { exercises: req.body },
-     },
+    db.Workout.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+            $push: { exercises: req.body },
+        },
         { new: true })
         .then(dbWorkout => {
             res.json(dbWorkout);
@@ -76,25 +84,31 @@ app.put("/api/workouts/:id", (req, res) => {
 //in range
 app.get("/api/workouts/range", (req, res) => {
     db.Workout.aggregate([
-      {$addFields: {totalDuration: {  $sum: "$exercises.duration"}
+        {
+            $addFields: {
+                totalDuration: {
+                    $sum: "$exercises.duration"
+                }
+            }
         }
-      }])
-    .limit(7)
-    .then(newWorkout => {
-      res.json(newWorkout);
-    }).catch(err => {
-      res.status(400).json(err);
-    });
-  });
-  
-  app.delete("/api/workouts/:id", (req, res) =>{
-    db.Workout.findByIdAndDelete( req.params.id)
-    .then(deletedWorkout => {
-      res.json(deletedWorkout);
-    }).catch(err => {
-      res.json(err);
-    });
-  });
+    ])
+        .limit(7)
+        .then(newWorkout => {
+            res.json(newWorkout);
+        }).catch(err => {
+            res.status(400).json(err);
+        });
+});
+
+
+app.delete("/api/workouts/:id", (req, res) => {
+    db.Workout.findByIdAndDelete(req.params.id)
+        .then(deletedWorkout => {
+            res.json(deletedWorkout);
+        }).catch(err => {
+            res.json(err);
+        });
+});
 
 
 // Server starts listening 

@@ -28,7 +28,7 @@ Exercise is a one of the keys to good health. This Workout-Tracker helps you to 
 
 ## Usage 
 *Instructions and examples for use:* 
-> **To use this application**: visit (live URL) (https://everyday-workout-tracker.herokuapp.com/)
+> **To use this application**: visit (live URL) ::: https://everyday-workout-tracker.herokuapp.com/
 
 ![Screenshot](https://github.com/Lilliemefie/workout-tracker/blob/main/assets/workout_scc.gif?raw=true)
 

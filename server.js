@@ -3,6 +3,7 @@ const express = require("express");
 const logger = require("morgan"); // logs all request to the console
 const mongoose = require("mongoose");
 const path = require("path");
+require('dotenv').config();
 
 // Sets up Express App
 const PORT = process.env.PORT || 3000;

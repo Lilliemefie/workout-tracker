@@ -48,12 +48,6 @@ const WorkoutSchema = new Schema({
 });
 
 
-// WorkoutSchema.methods.lastUpdatedDate = function() {
-//     this.lastUpdated = Date.now();
-  
-//     return this.lastUpdated;
-//   };
-  
 
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
